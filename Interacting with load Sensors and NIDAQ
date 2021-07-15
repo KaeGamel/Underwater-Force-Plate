@@ -1,0 +1,29 @@
+d = daq("ni"); %defining what function to use to interact with the  Daq
+ch = addinput(d,"Dev1",0:2,"Voltage"); % defining the channel numbers (0 1 and 2) and which nidaq 'Dev1', defining the type of signal
+
+ch(1).TerminalConfig = "Differential"; %using individual grounds so differeential instead of single, single is when all of the sensors are using common ground
+ch(1).Range = [-10.0 10.0];
+ch(2).TerminalConfig = "Differential";
+ch(2).Range = [-10.0 10.0];
+ch(3).TerminalConfig = "Differential";
+ch(3).Range = [-10.0 10.0];
+
+d.Rate = 1000; %% how many samples per second
+
+data = read(d,seconds(10)); % how long the trial will run for
+plot(data.Time, data.Variables); % plotting the unfiltered information
+
+%% Filter data
+lowpassFilter = designfilt('lowpassfir','FilterOrder',60,'CutoffFrequency',11,'SampleRate',1000); %filtering high frequencies
+data2=filter(lowpassFilter, data.Variables);
+%stackedplot(data.Time, data2);
+
+%% Zeroing Data
+
+zeroing= mean(data2(500:1000,:)); % taking a rolling average from row number 500 to 1000
+zeroingData= (data2-zeroing);
+
+figure
+plot(data.Time, zeroingData); %plotting the zerod data
+ylim([-9 9]);
+legend('Vertical','Foraft','Medial-lateral');
