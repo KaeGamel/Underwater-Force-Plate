@@ -5,7 +5,7 @@ Hello all!
 
 Welcome to the DIY Underwater Force plate
 
-In order to create your own force plate we will be using different plateforms and integrating them to gather small forces underwater(can detect .5grams)! 
+In order to create your own force plate we will be using different platforms and integrating them to gather small forces underwater(can detect .5grams)! 
 
 Fusion 360 to design the force sensors!
 
