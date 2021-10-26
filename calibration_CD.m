@@ -14,15 +14,29 @@
 % five5=input('Before Fifth weight drop');
 % five=input('Fifth weight drop');
 
+answer = questdlg('Vertical, Fore-Aft, or Lateral drop?', ...
+        'Drop Direction', ...
+        'Vertical','Fore-Aft','Lateral', 'Lateral');
+    switch answer
+        case 'Vertical'
+            row = 1;
+            titleP = 'Vertical Zeroing';
+        case 'Fore-Aft'
+            row = 3;
+            titleP = 'Fore-Aft Zeroing';
+        case 'Lateral'
+            row = 4;
+            titleP = 'Lateral Zeroing';
+    end
 
 %% Point Select
-plot(zeroingData(:,1),'k.'); hold on
+plot(zeroingData(100:end,row),'k.'); title(titleP);
+hold on
 zoom on
 pause;
-zeroX = ((1:length(zeroingData(:,1)))./100000)';
-title('Vertical Zeroing')
+zeroX = ((1:length(zeroingData(:,row)))./100000)';
     [x, y] = getpts();
-    [k,dist] = dsearchn([zeroX, zeroingData(:,1)],[x./100000,y]);
+    [k,dist] = dsearchn([zeroX, zeroingData(:,row)],[x./100000,y]);
 plot(k,y,'y.',k,y,'r+'); hold off
 
 loop = 0;
@@ -35,11 +49,12 @@ while loop == 0
             loop = 1;
         case 'No'
             disp('Ok, try clicking again')
-            plot(zeroingData(:,1),'k.'); hold on
+            plot(zeroingData(100:end,row),'k.'); title(titleP);
+            hold on
             zoom on
             pause;
                 [x, y] = getpts();
-                [k,dist] = dsearchn([zeroX, zeroingData(:,1)],[x./100000,y]);
+                [k,dist] = dsearchn([zeroX, zeroingData(:,row)],[x./100000,y]);
                 plot(k,y,'y.',k,y,'r+'); hold off
     end
 end
