@@ -1,3 +1,4 @@
+
 %% Calibration Using Signal Analyzer!!!!!!!!
 %Difference of two Whole numbers!!!! NOT 454.4 buttttt 454
 %Use two Data Cursors to find the time to take the difference between two
@@ -30,14 +31,15 @@ answer = questdlg('Vertical, Fore-Aft, or Lateral drop?', ...
     end
 
 %% Point Select
-plot(zeroingData(100:end,row),'k.'); title(titleP);
+plot(zeroingData(:,row),'k.'); title(titleP);
 hold on
 zoom on
 pause;
-zeroX = ((1:length(zeroingData(:,row)))./100000)';
+zeroX = ((1:length(zeroingData(:,row)))./10000)';
     [x, y] = getpts();
-    [k,dist] = dsearchn([zeroX, zeroingData(:,row)],[x./100000,y]);
-plot(k,y,'y.',k,y,'r+'); hold off
+    [k,dist] = dsearchn([zeroingData(:,row),zeroX],[y,x./10000]);
+    yNew = zeroingData(k,row);
+plot(x,y,'y.',k,yNew,'r+'); hold off
 
 loop = 0;
 while loop == 0
@@ -49,13 +51,14 @@ while loop == 0
             loop = 1;
         case 'No'
             disp('Ok, try clicking again')
-            plot(zeroingData(100:end,row),'k.'); title(titleP);
+            plot(zeroingData(:,row),'k.'); title(titleP);
             hold on
             zoom on
             pause;
                 [x, y] = getpts();
-                [k,dist] = dsearchn([zeroX, zeroingData(:,row)],[x./100000,y]);
-                plot(k,y,'y.',k,y,'r+'); hold off
+                [k,dist] = dsearchn([zeroX, zeroingData(:,row)],[x./10000,y]);
+                yNew = zeroingData(k,row);
+                plot(x,y,'y.',k,yNew,'r+'); hold off
     end
 end
 
@@ -84,4 +87,10 @@ diffLat = LatNoWeightSignal - LatWeightSignal;
 
 %% Calibration Matrix
 calibration = [diffVert, diffFore, diffLat];
+
+saveName = input('Save Name: ','s');
+writematrix(calibration,[saveName,'_mat.csv'])
+writematrix(zeroingData, [saveName,'_dat.csv'])
+writematrix(alignedData, [saveName,'_alg.csv'])
+writetimetable(data, [saveName,'_raw.csv'])
            
