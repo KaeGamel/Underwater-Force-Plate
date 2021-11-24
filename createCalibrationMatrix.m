@@ -12,5 +12,5 @@ knownWeight = M(:,4:6);
 % voltage and b is the known weight in grams
 calMatrix = inputVoltage\knownWeight;
 
-xlswrite([path,'\',ExcelCalFile,'_CalculatedMatrix.xlsx'],...
+xlswrite([path,'\',ExcelCalFile(1:end-4),'_CalculatedMatrix.xlsx'],...
     calMatrix)
