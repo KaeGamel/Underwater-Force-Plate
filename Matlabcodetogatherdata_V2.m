@@ -15,7 +15,7 @@ d.Rate = 1000;
 disp('reading data now')
 
 %%%%% Change based on trial length %%%%%
-data = read(d,seconds(20));
+data = read(d,seconds(30));
 %%%%%
 
 disp('data read complete')
