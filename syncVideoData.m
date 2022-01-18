@@ -84,7 +84,8 @@ reZeroedForceDat = [V1, F1, L1, forceDatTrial(:,4)];
 % writematrix(binDatTrial, [saveName,'_trialBinDat.csv'])
 % writematrix(forceDatTrial, [saveName,'_trialForceDat.csv'])
 % writematrix(reZeroedForceDat, [saveName,'_trialForceDat_reZeroed.csv'])
-% writematrix(binDat, [saveName,'_binaryWithTime.csv'])
+% writematrix(binDat, [saveName,'_binaryWithTime.csv']) % this will be used
+%                                                       % to sync kine data
 %%
 
 %% Plot data
