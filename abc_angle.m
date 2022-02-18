@@ -7,7 +7,7 @@ function [angle,angleDeg] = abc_angle(a, b, c, varargin)
 %
 % 1) Side should be either 0 for left and 1 for right (default 0)
 % 2) Vector_up should be a 3D vector pointing upwards (default [0, 0, 1])
-%
+%what
 % Output arguments:
 % 
 % 1) angle = 2D angle in radians
