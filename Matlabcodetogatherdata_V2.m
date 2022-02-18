@@ -1,5 +1,5 @@
 d = daq("ni");
-ch = addinput(d,"Dev2",0:3,"Voltage");
+ch = addinput(d,"Dev1",0:3,"Voltage");
 
 ch(1).TerminalConfig = "Differential";
 ch(1).Range = [-10.0 10.0];

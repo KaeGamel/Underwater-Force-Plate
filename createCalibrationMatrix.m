@@ -12,5 +12,10 @@ knownWeight = M(:,4:6);
 % voltage and b is the known weight in grams
 calMatrix = inputVoltage\knownWeight;
 
-xlswrite([path,'\',ExcelCalFile(1:end-4),'_CalculatedMatrix.xlsx'],...
+%% Save in folder with origial weight drops
+xlswrite([path,'\',ExcelCalFile(1:end-5),'_CalculatedMatrix.xlsx'],...
     calMatrix)
+
+%% Save in Working Directory
+% xlswrite(ExcelCalFile(1:end-5),'_CalculatedMatrix.xlsx'],...
+%     calMatrix)

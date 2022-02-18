@@ -1,4 +1,4 @@
-%%
+%% To do before running
 % STEP 0:   Run "correctDrift" first to get the force plate data in your
 %           workspace
 % STEP 1:   Read in the binary file AS A NUMERIC MATRIX by navigating to
