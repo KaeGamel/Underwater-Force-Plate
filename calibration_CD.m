@@ -1,20 +1,4 @@
-
-%% Calibration Using Signal Analyzer!!!!!!!!
-%Difference of two Whole numbers!!!! NOT 454.4 buttttt 454
-%Use two Data Cursors to find the time to take the difference between two
-%points
-
-% one1=input('No weight');
-% one=input('Weight drop');
-% two2=input('Before Second weight drop');
-% two=input('Second weight drop');
-% three3=input('Before Third weight drop');x
-% three=input('Third weight drop');
-% four4=input('Before Fourth weight drop');
-% four=input('Fourth weight drop');
-% five5=input('Before Fifth weight drop');
-% five=input('Fifth weight drop');
-
+%% Asks which direction the weight drop was in
 answer = questdlg('Vertical, Fore-Aft, or Lateral drop?', ...
         'Drop Direction', ...
         'Vertical','Fore-Aft','Lateral', 'Lateral');
@@ -90,7 +74,4 @@ calibration = [diffVert, diffFore, diffLat];
 
 saveName = input('Save Name: ','s');
 writematrix(calibration,[saveName,'_mat.csv'])
-writematrix(zeroingData, [saveName,'_dat.csv'])
-writematrix(alignedData, [saveName,'_alg.csv'])
-writetimetable(data, [saveName,'_raw.csv'])
            

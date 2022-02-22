@@ -15,7 +15,7 @@
 
 %% Sync time of force data with time of digitized data
 % Create seperate time array from binary file
-binDat(:,6) = binTime;
+binTime = binDat(:,6);
 
 % Import your DLT coordinates
 [kineDatName, kineDatPath] = uigetfile('*.*', 'Select your xyzpts file.');
@@ -118,6 +118,16 @@ for j = 1:2:length(allFinPlants)-2
     propulsive = [propulsive; timeStep*(cycle(2)-cycle(1))];
     recovery = [recovery; timeStep*(cycle(end)-cycle(2))];
 end
+
+strokeLength = median(strokeDur);       strokeSTD = std(strokeDur);
+propulsiveLength = median(propulsive);  propulsiveSTD = std(propulsive);
+recoveryLength = median(recovery);      recoverySTD = std(recovery);
+steps = length(allFinPlants)/2;
+
+variablesToSave = [trialTime, speed, steps, strokeLength, strokeSTD, propulsiveLength, propulsiveSTD, recoveryLength, recoverySTD];
+variablesToSave = array2table(variablesToSave, 'VariableNames', ...
+                              {'Time.s', 'Speed.mPs', 'Steps', 'StepLength.s', 'StepSTD.s', 'PropulsiveLength.s', 'PropulsiveSTD.s', ... 
+                               'RecoveryLength.s', 'RecoverySTD.s'});
     
 
 %% Re-sample force to be at the same read-rate as video data
@@ -128,8 +138,10 @@ foreaftF = resample(reZeroedForceDat(:,2),m,m2);
 lateralF = resample(reZeroedForceDat(:,3),m,m2);
 
 %% Merge force data with dlt raw and calcularted data
+saveName = input('Save Name: ','s');
 mergedDat = [kineDatTrial, shoulderAngle, eye2D, verticalF, foreaftF, lateralF];
-% writematrix(binDatTrial, [saveName,'_trialBinDat.csv'])
+writematrix(mergedDat, [saveName,'_mergedData.csv'])
+writetable(variablesToSave, [saveName,'_calculatedVariables.csv'])
 
 %% Plots
 figure

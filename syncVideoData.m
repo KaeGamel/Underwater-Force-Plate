@@ -1,6 +1,6 @@
 %% To do before running
 % STEP 0:   Run "correctDrift" first to get the force plate data in your
-%           workspace
+%           workspace, or read in the force data manually.
 % STEP 1:   Read in the binary file AS A NUMERIC MATRIX by navigating to
 %           the file in the Current Folder window and double clicking
 % STEO 3:   Rename the imported matrix "binDat"
@@ -81,11 +81,12 @@ reZeroedForceDat = [V1, F1, L1, forceDatTrial(:,4)];
 
 %% Save the re-zeroed data so you don't have to run all this next time %%%
 % saveName = 'Pbarb38_03_2021_11_19_'; %%% <- change this name
-% writematrix(binDatTrial, [saveName,'_trialBinDat.csv'])
-% writematrix(forceDatTrial, [saveName,'_trialForceDat.csv'])
-% writematrix(reZeroedForceDat, [saveName,'_trialForceDat_reZeroed.csv'])
-% writematrix(binDat, [saveName,'_binaryWithTime.csv']) % this will be used
-%                                                       % to sync kine data
+saveName = input('Save Name: ','s');
+writematrix(binDatTrial, [saveName,'_trialBinDat.csv'])
+writematrix(forceDatTrial, [saveName,'_trialForceDat.csv'])
+writematrix(reZeroedForceDat, [saveName,'_trialForceDat_reZeroed.csv'])
+writematrix(binDat, [saveName,'_binaryWithTime.csv']) % this will be used
+                                                      % to sync kine data
 %%
 
 %% Plot data
@@ -118,3 +119,6 @@ title('Force Trace with Pelvic Fin Bars')
 xlabel('Time from Weight Drop (s)') 
 ylabel('Force (g)') 
 legend('Vertical', 'Fore-Aft', 'Lateral')
+
+% run this if you want to clean up your workspace
+% clearvars -except binDat binDatTrial reZeroedForceDat PectFinOn PectFinOff
