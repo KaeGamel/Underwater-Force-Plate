@@ -75,13 +75,14 @@ eyePeakX = eye2D(p,1); eyePeakY = eye2D(p,2);
 [m,~] = size(kineDatTrial);
 shoulderAngle = [];
 
-% find the angle between the eye, shoulder, and fin tip in the lateral view
+% Find the angle between the eye, shoulder, and fin tip in the lateral view
 for i = 1:m
     [angle,angleDeg] = abc_angle(eye2D(i,:), shoulder2D(i,:), pectFinTip2D(i,:),[0,1,0]);
     shoulderAngle = [shoulderAngle;angleDeg];
 end
 
-% find the peaks of max fin angle
+% Find the peaks of max fin height
+% Currently not saved but might be useful later
 [k,pectP] = findpeaks(pectFinTip2D(:,2),'MinPeakProminence',0.002);
 pectPeakX = pectFinTip2D(pectP,1); pectPeakY = pectFinTip2D(pectP,2);
 %     figure
@@ -90,22 +91,24 @@ pectPeakX = pectFinTip2D(pectP,1); pectPeakY = pectFinTip2D(pectP,2);
 %     hold on
 %     plot(pectPeakX, pectPeakY, 'ro')
 
-% find start and stop times of indivudial steps
+% Find start and stop times of indivudial steps using data from binary file
+% If you get an error here it may be because you didn't run "syncVideoData" 
+% first which is where we pull out the variables used in this loop
 if PectFinOn(1) > PectFinOff(1)
-% Fish starts with fin planted
+    % Fish starts with fin planted
     PectFinOn = [1; PectFinOn];
 else
     PectFinOff = [1; PectFinOff];
 end
 
 if PectFinOn(end) > PectFinOff(end)
-% Fish ends with fin planted
+    % Fish ends with fin planted
     PectFinOn = [PectFinOn;m];
 else
-     PectFinOff = [PectFinOff;m];
+    PectFinOff = [PectFinOff;m];
 end
 
-% loop through all the steps and calculate variables
+% Loop through all the steps and calculate variables
 % strokeDur: length of a step from pect fin plant - pect fin plant
 % propulsive: length of time fin spends on the ground
 % recovery: length of time fin spends in the air
@@ -119,15 +122,18 @@ for j = 1:2:length(allFinPlants)-2
     recovery = [recovery; timeStep*(cycle(end)-cycle(2))];
 end
 
+%% Organize variables for saving
 strokeLength = median(strokeDur);       strokeSTD = std(strokeDur);
 propulsiveLength = median(propulsive);  propulsiveSTD = std(propulsive);
 recoveryLength = median(recovery);      recoverySTD = std(recovery);
 steps = length(allFinPlants)/2;
 
-variablesToSave = [trialTime, speed, steps, strokeLength, strokeSTD, propulsiveLength, propulsiveSTD, recoveryLength, recoverySTD];
+saveName = input('Save Name: ','s');
+
+variablesToSave = [saveName, trialTime, speed, steps, strokeLength, strokeSTD, propulsiveLength, propulsiveSTD, recoveryLength, recoverySTD];
 variablesToSave = array2table(variablesToSave, 'VariableNames', ...
-                              {'Time.s', 'Speed.mPs', 'Steps', 'StepLength.s', 'StepSTD.s', 'PropulsiveLength.s', 'PropulsiveSTD.s', ... 
-                               'RecoveryLength.s', 'RecoverySTD.s'});
+                              {'TrialID','Time.s', 'Speed.mPs', 'Steps', 'StepLength.s', 'StepSTD.s', ...
+                               'PropulsiveLength.s', 'PropulsiveSTD.s', 'RecoveryLength.s', 'RecoverySTD.s'});
     
 
 %% Re-sample force to be at the same read-rate as video data
@@ -137,8 +143,7 @@ verticalF = resample(reZeroedForceDat(:,1),m,m2);
 foreaftF = resample(reZeroedForceDat(:,2),m,m2);
 lateralF = resample(reZeroedForceDat(:,3),m,m2);
 
-%% Merge force data with dlt raw and calcularted data
-saveName = input('Save Name: ','s');
+%% Merge force data with dlt raw and calculated data and save
 mergedDat = [kineDatTrial, shoulderAngle, eye2D, verticalF, foreaftF, lateralF];
 writematrix(mergedDat, [saveName,'_mergedData.csv'])
 writetable(variablesToSave, [saveName,'_calculatedVariables.csv'])
@@ -147,43 +152,43 @@ writetable(variablesToSave, [saveName,'_calculatedVariables.csv'])
 figure
 [hAx,hLine1,hLine2] = plotyy(time, shoulderAngle, time,verticalF);
 xlabel('Time (s)')
-ylabel(hAx(1),'Shoulder Angle (deg)') % left y-axis 
-ylabel(hAx(2),'Vertical F (g)') % right y-axis
+ylabel(hAx(1),'Shoulder Angle (deg)')   % left y-axis 
+ylabel(hAx(2),'Vertical F (g)')         % right y-axis
 hLine1.LineWidth = 1.5; hLine2.LineWidth = 1.5; hLine2.LineStyle = ':';
 
 figure
 [hAx,hLine1,hLine2] = plotyy(time, shoulderAngle, time,foreaftF);
 xlabel('Time (s)')
-ylabel(hAx(1),'Shoulder Angle (deg)') % left y-axis 
-ylabel(hAx(2),'Fore-Aft F (g)') % right y-axis
+ylabel(hAx(1),'Shoulder Angle (deg)')   % left y-axis 
+ylabel(hAx(2),'Fore-Aft F (g)')         % right y-axis
 hLine1.LineWidth = 1.5; hLine2.LineWidth = 1.5; hLine2.LineStyle = ':';
 
 figure
 [hAx,hLine1,hLine2] = plotyy(time, shoulderAngle, time,lateralF);
 xlabel('Time (s)')
-ylabel(hAx(1),'Shoulder Angle (deg)') % left y-axis 
-ylabel(hAx(2),'Lateral F (g)') % right y-axis
+ylabel(hAx(1),'Shoulder Angle (deg)')   % left y-axis 
+ylabel(hAx(2),'Lateral F (g)')          % right y-axis
 hLine1.LineWidth = 1.5; hLine2.LineWidth = 1.5; hLine2.LineStyle = ':';
 
 figure
 [hAx,hLine1,hLine2] = plotyy(time, eye2D(:,2).*100, time,verticalF);
 xlabel('Time (s)')
-ylabel(hAx(1),'Eye Height (cm)') % left y-axis 
-ylabel(hAx(2),'Vertical F (g)') % right y-axis
+ylabel(hAx(1),'Eye Height (cm)')        % left y-axis 
+ylabel(hAx(2),'Vertical F (g)')         % right y-axis
 hLine1.LineWidth = 1.5; hLine2.LineWidth = 1.5; hLine2.LineStyle = ':';
 
 figure
 [hAx,hLine1,hLine2] = plotyy(time, eye2D(:,2).*100, time,foreaftF);
 xlabel('Time (s)')
-ylabel(hAx(1),'Eye Height (cm)') % left y-axis 
-ylabel(hAx(2),'Fore-Aft F (g)') % right y-axis
+ylabel(hAx(1),'Eye Height (cm)')        % left y-axis 
+ylabel(hAx(2),'Fore-Aft F (g)')         % right y-axis
 hLine1.LineWidth = 1.5; hLine2.LineWidth = 1.5; hLine2.LineStyle = ':';
 
 figure
 [hAx,hLine1,hLine2] = plotyy(time, eye2D(:,2).*100, time,lateralF);
 xlabel('Time (s)')
-ylabel(hAx(1),'Eye Height (cm)') % left y-axis 
-ylabel(hAx(2),'Lateral F (g)') % right y-axis
+ylabel(hAx(1),'Eye Height (cm)')        % left y-axis 
+ylabel(hAx(2),'Lateral F (g)')          % right y-axis
 hLine1.LineWidth = 1.5; hLine2.LineWidth = 1.5; hLine2.LineStyle = ':';
 
 
