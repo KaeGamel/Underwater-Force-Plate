@@ -99,8 +99,8 @@ ylabel('Vertical Force (g)')
 xlabel('Step Cycle %')
 title(fish)
 yyaxis right
-plot(Perc, EHY_mean,  'LineWidth', 2, 'Color','b', 'LineStyle','--')
-ylabel('Shoulder Angle (deg)')
+plot(Perc, EHY_mean*51,  'LineWidth', 2, 'Color','b', 'LineStyle','--')
+ylabel('Eye Height (mm)')
 
 
 
@@ -131,8 +131,8 @@ title(fish)
 xlabel('Step Cycle %')
 ylabel('Fore-Aft Force (g)')
 yyaxis right
-plot(Perc, Angle_mean,  'LineWidth', 2, 'Color','b', 'LineStyle','--')
-ylabel('Shoulder Angle (deg)')
+plot(Perc, EHY_mean*51,  'LineWidth', 2, 'Color','b', 'LineStyle','--')
+ylabel('Eye Height (mm)')
 
 %% Lateral
 figure
@@ -161,5 +161,5 @@ title(fish)
 xlabel('Step Cycle %')
 ylabel('Lateral Force (g)')
 yyaxis right
-plot(Perc, Angle_mean,  'LineWidth', 2, 'Color','b', 'LineStyle','--')
-ylabel('Shoulder Angle (deg)')
+plot(Perc, EHY_mean,  'LineWidth', 2, 'Color','b', 'LineStyle','--')
+ylabel('Eye Height (mm)')

@@ -40,8 +40,8 @@ for i = 1:length(trials)
         ForeAftF = [ForeAftF, ForeRes];
         LateralF = [LateralF, LateRes];
         Angle = [Angle, AngRes];
-        EyeHeightX = [EyeHeightX, EHxeRes];
-        EyeHeightY = [EyeHeightY, EHxeRes];
+        EyeHeightX = [EyeHeightX, EHxRes];
+        EyeHeightY = [EyeHeightY, EHyRes];
         
         PectFin = cycle(2:end,21)-(cycle(1:end-1,21));
             PectFinOff = find(PectFin == -1);
@@ -68,9 +68,9 @@ PelvOffMedian = median(PelvOffS);
 Vert_mean_2 = mean(VerticalF,2);
 Fore_mean_2 = mean(ForeAftF,2);
 Late_mean_2 = mean(LateralF,2);
-anglemean = mean(Angle, 2);
+Angle_mean = mean(Angle, 2);
 EHX_mean = mean(EyeHeightX, 2);
-EHY_mean = mean(EyeHeughtY, 2);
+EHY_mean = (mean(EyeHeightY, 2))*51.44;
 
 %% Vertical
 figure
@@ -95,10 +95,13 @@ subplot(4,1,[1,2])
 hold on
 plot(Perc, VerticalF)
 plot(Perc, Vert_mean_2, 'LineWidth', 2, 'Color','k')
-plot(Perc, Anglemean
-title(fish)
+ylabel('Vertical Force (g) [Down]','Color', 'k')
 xlabel('Step Cycle %')
-ylabel('Vertical Force (g)')
+title(fish)
+addaxis(Perc,Angle_mean,'b','LineWidth', 2,'LineStyle','--')
+addaxislabel(2,'Shoulder Angle (deg)')
+addaxis(Perc,EHY_mean,'r', 'LineWidth', 2,'LineStyle','--')
+addaxislabel(3,'EyeHeight (mm)')
 
 %% Fore Aft
 figure
@@ -125,8 +128,11 @@ plot(Perc, ForeAftF)
 plot(Perc, Fore_mean_2, 'LineWidth', 2, 'Color','k')
 title(fish)
 xlabel('Step Cycle %')
-ylabel('Fore-Aft Force (g)')
-
+ylabel('Fore-Aft Force (g) [Aft]','Color', 'k')
+addaxis(Perc,Angle_mean,'b','LineWidth', 2,'LineStyle','--')
+addaxislabel(2,'Shoulder Angle (deg)')
+addaxis(Perc,EHY_mean,'r', 'LineWidth', 2,'LineStyle','--')
+addaxislabel(3,'EyeHeight (mm)')
 
 %% Lateral
 figure
@@ -151,6 +157,10 @@ subplot(4,1,[1,2])
 hold on
 plot(Perc, LateralF)
 plot(Perc, Late_mean_2, 'LineWidth', 2, 'Color','k')
-title(fish)
+ylabel('Lateral Force (g) [Left]','Color', 'k')
 xlabel('Step Cycle %')
-ylabel('Lateral Force (g)')
+title(fish)
+addaxis(Perc,Angle_mean,'b','LineWidth', 2,'LineStyle','--')
+addaxislabel(2,'Shoulder Angle (deg)')
+addaxis(Perc,EHY_mean,'r', 'LineWidth', 2,'LineStyle','--')
+addaxislabel(3,'EyeHeight (mm)')
